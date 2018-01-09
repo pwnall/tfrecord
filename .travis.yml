@@ -1,0 +1,19 @@
+sudo: false
+dist: trusty
+language: node_js
+
+node_js:
+  - "8"
+  - "9"
+compiler: clang-4
+env:
+  - CXX=clang-4
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    - llvm-toolchain-trusty-4.0
+    packages:
+    - g++-6
+    - clang-4.0
+before_script: npm run prepack

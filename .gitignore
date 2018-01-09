@@ -1,0 +1,11 @@
+# Compiled TypeScript.
+lib/
+
+# npm modules.
+node_modules/
+
+# TensorFlow protobuf definitions.
+proto/*.proto
+
+# Compiled protobufs
+src/gen/

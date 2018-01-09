@@ -1,0 +1,13 @@
+# npm modules.
+node_modules/
+
+# TensorFlow protobuf definitions.
+proto/
+
+# Development scripts.
+script/
+
+# Test code and data.
+*_test.js
+*_test.ts
+testdata/

@@ -1,0 +1,41 @@
+{
+  "name": "tfrecord",
+  "version": "0.1.0",
+  "description": "Reader and writer for the TensorFlow Record file format",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "scripts": {
+    "prepack": "scripts/generate.sh",
+    "pretest": "rm -rf js/ && node_modules/.bin/tsc",
+    "test": "node_modules/.bin/mocha lib/**/*_test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pwnall/tfrecord.git"
+  },
+  "keywords": [
+    "tensorflow",
+    "tfrecord"
+  ],
+  "author": "Victor Costan <victor@costan.us>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pwnall/tfrecord/issues"
+  },
+  "homepage": "https://github.com/pwnall/tfrecord",
+  "dependencies": {
+    "fast-crc32c": "^1.0.4",
+    "protobufjs": "^6.8.4"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^4.1.0",
+    "promised-temp": "^0.1.0",
+    "ts-node": "^4.1.0",
+    "typescript": "^2.6.2",
+    "@types/chai": "^4.1.0",
+    "@types/mocha": "^2.2.46",
+    "@types/node": "^9.3.0",
+    "@types/promised-temp": "^0.1.1"
+  }
+}
