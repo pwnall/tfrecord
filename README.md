@@ -1,5 +1,8 @@
 # TensorFlow record (.tfrecord) File I/O for Node
 
+[![Build Status](https://travis-ci.org/pwnall/tfrecord.svg)](https://travis-ci.org/pwnall/tfrecord)
+[![NPM Version](http://img.shields.io/npm/v/tfrecord.svg)](https://www.npmjs.org/package/tfrecord)
+
 Produce data for your TensorFlow pipelines directly in node.
 
 

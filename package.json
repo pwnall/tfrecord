@@ -5,8 +5,8 @@
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
-    "prepack": "scripts/generate.sh",
-    "pretest": "rm -rf js/ && node_modules/.bin/tsc",
+    "prepack": "scripts/generate.sh && node_modules/.bin/tsc",
+    "pretest": "node_modules/.bin/tsc",
     "test": "node_modules/.bin/mocha lib/**/*_test.js"
   },
   "repository": {

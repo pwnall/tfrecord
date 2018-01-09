@@ -9,3 +9,6 @@ proto/*.proto
 
 # Compiled protobufs
 src/gen/
+
+# npm pack.
+tfrecord-*.tgz

@@ -9,5 +9,10 @@ script/
 
 # Test code and data.
 *_test.js
+*_test.js.map
 *_test.ts
+*_test.d.ts
 testdata/
+
+# npm pack.
+tfrecord-*.tgz

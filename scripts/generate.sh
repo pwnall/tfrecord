@@ -25,3 +25,6 @@ fi
 if [ ! -f src/gen/protos.d.ts ]; then
   ./node_modules/.bin/pbts --out src/gen/protos.d.ts lib/gen/protos.js
 fi
+if [ ! -f lib/gen/protos.d.ts ]; then
+  ./node_modules/.bin/pbts --out lib/gen/protos.d.ts lib/gen/protos.js
+fi
