@@ -38,7 +38,7 @@ describe('Writer', () => {
     });
   });
 
-  describe('.writeRecord', () => {
+  describe('.writeExample', () => {
     let filePath : string, writer : tfrecord.Writer;
     beforeEach(async () => {
       filePath = await createTempFile();

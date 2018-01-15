@@ -8,11 +8,13 @@ import { tensorflow } from './gen/protos';
 export const Example = tensorflow.Example;
 export type Example = tensorflow.Example;
 
+import { ExampleBuilder } from './example_builder';
 import { Reader } from './reader';
 import { RecordReader } from './record_reader';
 import { RecordWriter } from './record_writer';
 import { Writer } from './writer';
-export { Reader, RecordReader, RecordWriter, Writer };
+export { ExampleBuilder, Reader, RecordReader, RecordWriter, Writer };
 
+export const createBuilder = ExampleBuilder.create;
 export const createReader = Reader.create;
 export const createWriter = Writer.create;
