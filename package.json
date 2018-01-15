@@ -1,6 +1,6 @@
 {
   "name": "tfrecord",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Reader and writer for the TensorFlow Record file format",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
