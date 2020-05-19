@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/pwnall/tfrecord",
   "dependencies": {
+    "awaitify-stream": "^1.0.2",
     "fast-crc32c": "^1.0.4",
     "protobufjs": "^6.8.4"
   },
@@ -32,7 +33,7 @@
     "mocha": "^4.1.0",
     "promised-temp": "^0.1.0",
     "ts-node": "^4.1.0",
-    "typescript": "^2.6.2",
+    "typescript": "^3.8.3",
     "@types/chai": "^4.1.0",
     "@types/mocha": "^2.2.46",
     "@types/node": "^9.3.0",

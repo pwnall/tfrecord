@@ -1,17 +1,18 @@
 import * as fs from 'fs';
-import { promisify } from 'util';
-
+import { Readable } from 'stream';
 import { maskedCrc32c } from './crc32c';
 
-const fsOpen = promisify(fs.open);
-const fsRead = promisify(fs.read);
-const fsClose = promisify(fs.close);
+const aw = require('awaitify-stream');
 
 export class RecordReader {
   // Opens a TFRecord file and creates a RecordReader around it.
   public static async create(filePath : fs.PathLike) : Promise<RecordReader> {
-    const fd = await fsOpen(filePath, 'r');
-    return new RecordReader(fd);
+    return this.createFromStream(fs.createReadStream(filePath));
+  }
+
+  // Opens a TFRecord file stream and creates a RecordReader around it.
+  public static async createFromStream(stream : Readable) : Promise<RecordReader> {
+    return new RecordReader(stream);
   }
 
   // Reads a record from the file.
@@ -24,47 +25,33 @@ export class RecordReader {
     if (this.closed_)
       return null;
 
-    let { bytesRead }  =
-        await fsRead(this.fd_, this.lengthAndCrcBuffer_, 0, 12, null);
-    if (bytesRead === 0)
+    const lengthAndCrcBuffer = await this.reader_.readAsync(12);
+    if (lengthAndCrcBuffer === null)
       return null;
-    if (bytesRead !== 12)
-      throw new Error(`Incomplete read; expected 12 bytes, got ${bytesRead}`);
 
-    const length = this.lengthAndCrc_.getUint32(0, true);
-    const length64 = this.lengthAndCrc_.getUint32(4, true);
-    const lengthCrc = this.lengthAndCrc_.getUint32(8, true);
+    const lengthBuffer = Buffer.from(lengthAndCrcBuffer.buffer, lengthAndCrcBuffer.byteOffset, 8);
+    const lengthAndCrc = new DataView(lengthAndCrcBuffer.buffer, lengthAndCrcBuffer.byteOffset, 12);
+    const length = lengthAndCrc.getUint32(0, true);
+    const length64 = lengthAndCrc.getUint32(4, true);
+    const lengthCrc = lengthAndCrc.getUint32(8, true);
 
     if (length64 !== 0)
       throw new Error(`4GB+ records not supported`);
-
-    if (lengthCrc !== maskedCrc32c(this.lengthBuffer_))
+    if (lengthCrc !== maskedCrc32c(lengthBuffer))
       throw new Error('Incorrect record length CRC32C');
 
     const readLength = length + 4;  // Need to read the CRC32C as well.
-    if (readLength > this.dataBuffer_.length) {
-      // Grow the buffer.
-      let newLength = this.dataBuffer_.length;
-      while (newLength < readLength)
-        newLength *= 2;
-      this.dataBuffer_ = new Uint8Array(newLength);
-      this.dataBufferView_ =
-          new DataView(this.dataBuffer_.buffer, 0, newLength);
+    const dataBuffer = await this.reader_.readAsync(readLength);
+    if (dataBuffer === null) {
+      throw new Error(`Incomplete read; expected ${readLength} bytes`);
     }
 
-    ({ bytesRead } =
-        await fsRead(this.fd_, this.dataBuffer_, 0, readLength, null));
-    if (bytesRead !== readLength) {
-      throw new Error(
-          `Incomplete read; expected ${readLength} bytes, got ${bytesRead}`);
-    }
-
-    const recordData = new Uint8Array(this.dataBuffer_.buffer, 0, length);
-    const recordCrc = this.dataBufferView_.getUint32(length, true);
+    const dataBufferView = new DataView(dataBuffer.buffer, dataBuffer.byteOffset, readLength);
+    const recordData = new Uint8Array(dataBuffer.buffer, dataBuffer.byteOffset, length);
+    const recordCrc = dataBufferView.getUint32(length, true);
 
     // TODO(pwnall): Check CRC.
-    const recordBuffer = Buffer.from(
-        this.dataBuffer_.buffer as ArrayBuffer, 0, length);
+    const recordBuffer = Buffer.from(dataBuffer.buffer as ArrayBuffer, dataBuffer.byteOffset, length);
     if (recordCrc !== maskedCrc32c(recordBuffer))
       throw new Error('Incorrect record CRC32C');
 
@@ -80,37 +67,20 @@ export class RecordReader {
       return;
 
     this.closed_ = true;
-    await fsClose(this.fd_);
+    this.stream_.destroy();
   }
 
   // RecordReader instances should be created using RecordReader.create.
-  private constructor(fd : number) {
-    this.fd_ = fd;
+  private constructor(stream : Readable) {
+    this.stream_ = stream;
+    this.reader_ = aw.createReader(stream);
     this.closed_ = false;
-
-    this.dataBuffer_ = new Uint8Array(1);
-    this.dataBufferView_ = new DataView(this.dataBuffer_.buffer, 0, 1);
-
-    const metadataBuffer = new ArrayBuffer(12);
-    this.lengthAndCrcBuffer_ = new Uint8Array(metadataBuffer, 0, 12);
-    this.lengthAndCrc_ = new DataView(metadataBuffer, 0, 12);
-    this.lengthBuffer_ = Buffer.from(metadataBuffer, 0, 8);
   }
 
   // The file descriptor used to read records.
-  private fd_ : number;
+  private stream_ : Readable;
+  // Awaitfy-stream reader.
+  private reader_ : any;
   // True when the reader is closed.
   private closed_ : boolean;
-
-  // Buffer used to read the 8-byte length and 4-byte CRC32C header.
-  private lengthAndCrcBuffer_ : Uint8Array;
-  // DataView used to extract the 8-byte length and 4-byte CRC32C header.
-  private lengthAndCrc_ : DataView;
-  // node.js Buffer pointing at length for CRC32C computations.
-  private lengthBuffer_ : Buffer;
-
-  // Buffer used to read records.
-  private dataBuffer_ : Uint8Array;
-  // DataVieww used to extract the 4-byte CRC32C at the end of the record.
-  private dataBufferView_ : DataView;
 }
