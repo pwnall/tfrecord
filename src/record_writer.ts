@@ -21,9 +21,10 @@ export class RecordWriter {
   // Uses a Buffer instead of an Uint8Array because that's what protobuf.js
   // writes to.
   public async writeRecord(record : Buffer) : Promise<void> {
-    const lengthAndCrcBuffer = new Uint8Array(12);
-    const lengthAndCrc = new DataView(lengthAndCrcBuffer.buffer, 0, 12);
-    const lengthBuffer = Buffer.from(lengthAndCrcBuffer.buffer, 0, 8);
+    const metadataBuffer = new ArrayBuffer(12);
+    const lengthAndCrcBuffer = new Uint8Array(metadataBuffer, 0, 12);
+    const lengthAndCrc = new DataView(metadataBuffer, 0, 12);
+    const lengthBuffer = Buffer.from(metadataBuffer, 0, 8);
 
     lengthAndCrc.setUint32(0, record.length, true);
     lengthAndCrc.setUint32(4, 0, true);
