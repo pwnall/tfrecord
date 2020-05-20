@@ -2,7 +2,7 @@
 
 # Download the protobuf definitions from the TensorFlow repository.
 TF_VERSION="v1.4.1"
-TF_ROOT="https://raw.githubusercontent.com/tensorflow/tensorflow/${TF_VERSION}/"
+TF_ROOT="https://raw.githubusercontent.com/tensorflow/tensorflow/${TF_VERSION}"
 mkdir -p proto/
 if [ ! -f  proto/example.proto ]; then
   curl "${TF_ROOT}/tensorflow/core/example/example.proto" > proto/example.proto
