@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import { Writable } from 'stream';
 import { tensorflow } from './gen/protos';
 import { RecordWriter } from './record_writer';
 
@@ -7,6 +8,12 @@ export class Writer {
   // Opens a TFRecord file and creates a RecordWriter around it.
   public static async create(filePath : fs.PathLike) : Promise<Writer> {
     const recordReader = await RecordWriter.create(filePath);
+    return new Writer(recordReader);
+  }
+
+  // Opens a TFRecord file stream and creates a RecordWriter around it.
+  public static async createFromStream(stream : Writable) : Promise<Writer> {
+    const recordReader = await RecordWriter.createFromStream(stream);
     return new Writer(recordReader);
   }
 

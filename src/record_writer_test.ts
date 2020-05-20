@@ -34,7 +34,7 @@ describe('RecordWriter', () => {
       const writer = await tfrecord.RecordWriter.create(filePath);
       expect(writer).to.be.instanceOf(tfrecord.RecordWriter);
 
-      writer.close();
+      await writer.close();
     });
   });
 
@@ -50,7 +50,7 @@ describe('RecordWriter', () => {
       for (let i = 0; i < 1000; ++i)
         recordData.push((i + 42) % 256);
       await writer.writeRecord(Buffer.from(recordData));
-      writer.close();
+      await writer.close();
 
       const reader = await tfrecord.RecordReader.create(filePath);
       const readRecord = await reader.readRecord();
@@ -70,7 +70,7 @@ describe('RecordWriter', () => {
 
         await writer.writeRecord(Buffer.from(recordData));
       }
-      writer.close();
+      await writer.close();
 
       const reader = await tfrecord.RecordReader.create(filePath);
       for (let i = 0; i < 3; ++i) {

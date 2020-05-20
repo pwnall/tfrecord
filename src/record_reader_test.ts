@@ -10,7 +10,7 @@ describe('RecordReader', () => {
       const reader = await tfrecord.RecordReader.create(filePath);
       expect(reader).to.be.instanceOf(tfrecord.RecordReader);
 
-      reader.close();
+      await reader.close();
     });
   });
 

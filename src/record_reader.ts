@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import { Readable } from 'stream';
+
 import { maskedCrc32c } from './crc32c';
 
 const aw = require('awaitify-stream');
@@ -73,13 +74,13 @@ export class RecordReader {
   // RecordReader instances should be created using RecordReader.create.
   private constructor(stream : Readable) {
     this.stream_ = stream;
-    this.reader_ = aw.createReader(stream);
+    this.reader_ = aw.createReader(this.stream_);
     this.closed_ = false;
   }
 
-  // The file descriptor used to read records.
+  // The file stream used to read records.
   private stream_ : Readable;
-  // Awaitfy-stream reader.
+  // Awaitify-stream reader.
   private reader_ : any;
   // True when the reader is closed.
   private closed_ : boolean;
