@@ -34,7 +34,7 @@
     "mocha": "^4.1.0",
     "promised-temp": "^0.1.0",
     "ts-node": "^4.1.0",
-    "typescript": "^2.6.2",
+    "typescript": "^3.8.3",
     "@types/chai": "^4.1.0",
     "@types/mocha": "^2.2.46",
     "@types/node": "^9.6.56",
