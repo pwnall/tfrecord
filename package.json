@@ -1,5 +1,5 @@
 {
-  "name": "tfrecord",
+  "name": "@wholenews/tfrecord",
   "version": "0.2.0",
   "description": "Reader and writer for the TensorFlow Record file format",
   "main": "./lib/index.js",
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pwnall/tfrecord.git"
+    "url": "git+https://github.com/wholenews/tfrecord.git"
   },
   "keywords": [
     "tensorflow",
