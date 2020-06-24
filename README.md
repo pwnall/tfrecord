@@ -1,7 +1,7 @@
 # TensorFlow record (.tfrecord) File I/O for Node
 
-[![Build Status](https://travis-ci.org/pwnall/tfrecord.svg)](https://travis-ci.org/pwnall/tfrecord)
-[![NPM Version](http://img.shields.io/npm/v/tfrecord.svg)](https://www.npmjs.org/package/tfrecord)
+[![Build Status](https://travis-ci.org/wholenews/tfrecord-stream.svg)](https://travis-ci.org/wholenews/tfrecord-stream)
+[![NPM Version](http://img.shields.io/npm/v/tfrecord-stream.svg)](https://www.npmjs.org/package/tfrecord-stream)
 
 The TFRecord format is briefly documented
 [here](https://www.tensorflow.org/api_guides/python/python_io#tfrecords_format_details),
