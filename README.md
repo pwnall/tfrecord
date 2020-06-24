@@ -31,7 +31,7 @@ TensorFlow installation.
 The example below covers recommended API usage.
 
 ```javascript
-const tfrecord = require('tfrecord');
+import { Reader, Writer } from 'tfrecord'
 
 async function writeDemo() {
   const builder = tfrecord.createBuilder();
@@ -40,13 +40,13 @@ async function writeDemo() {
   builder.setBinary('name', new Uint8Array([65, 66, 67]));
   const example = builder.releaseExample();
 
-  const writer = await tfrecord.createWriter('data.tfrecord');
+  const writer = await Writer.createFromStream(fs.createWriteStream('data.tfrecord'));
   await writer.writeExample(example);
   await writer.close();
 }
 
 async function readDemo() {
-  const reader = await tfrecord.createReader('data.tfrecord');
+  const reader = await Reader.createFromStream(fs.createReadStream('data.tfrecord'));
   let example;
   while (example = await reader.readExample()) {
     console.log('%j', example.toJSON());

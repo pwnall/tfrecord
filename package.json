@@ -1,5 +1,5 @@
 {
-  "name": "@wholenews/tfrecord",
+  "name": "tfrecord-stream",
   "version": "0.2.0",
   "description": "Reader and writer for the TensorFlow Record file format",
   "main": "./lib/index.js",
