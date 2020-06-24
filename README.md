@@ -1,7 +1,7 @@
 # TensorFlow record (.tfrecord) File I/O for Node
 
-[![Build Status](https://travis-ci.org/pwnall/tfrecord.svg)](https://travis-ci.org/pwnall/tfrecord)
-[![NPM Version](http://img.shields.io/npm/v/tfrecord.svg)](https://www.npmjs.org/package/tfrecord)
+[![Build Status](https://travis-ci.org/wholenews/tfrecord-stream.svg)](https://travis-ci.org/wholenews/tfrecord-stream)
+[![NPM Version](http://img.shields.io/npm/v/tfrecord-stream.svg)](https://www.npmjs.org/package/tfrecord-stream)
 
 The TFRecord format is briefly documented
 [here](https://www.tensorflow.org/api_guides/python/python_io#tfrecords_format_details),
@@ -31,7 +31,7 @@ TensorFlow installation.
 The example below covers recommended API usage.
 
 ```javascript
-const tfrecord = require('tfrecord');
+import { Reader, Writer } from 'tfrecord'
 
 async function writeDemo() {
   const builder = tfrecord.createBuilder();
@@ -40,13 +40,13 @@ async function writeDemo() {
   builder.setBinary('name', new Uint8Array([65, 66, 67]));
   const example = builder.releaseExample();
 
-  const writer = await tfrecord.createWriter('data.tfrecord');
+  const writer = await Writer.createFromStream(fs.createWriteStream('data.tfrecord'));
   await writer.writeExample(example);
   await writer.close();
 }
 
 async function readDemo() {
-  const reader = await tfrecord.createReader('data.tfrecord');
+  const reader = await Reader.createFromStream(fs.createReadStream('data.tfrecord'));
   let example;
   while (example = await reader.readExample()) {
     console.log('%j', example.toJSON());
